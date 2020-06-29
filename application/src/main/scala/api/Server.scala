@@ -2,7 +2,7 @@ package com.jisantuc.configableauth.api
 
 import cats.effect._
 import cats.implicits._
-import com.jisantuc.configableauth.api.commands.{ApiConfig, Commands, DatabaseConfig}
+import com.jisantuc.configableauth.api.commands.{ApiConfig, AuthConfig, Commands, DatabaseConfig}
 import com.jisantuc.configableauth.api.endpoints.UserEndpoints
 import com.jisantuc.configableauth.api.services.UsersService
 import doobie.hikari.HikariTransactor
@@ -19,6 +19,7 @@ object Server extends IOApp {
 
   private def createServer(
       apiConfig: ApiConfig,
+      authConfig: AuthConfig,
       dbConfig: DatabaseConfig
   ): Resource[IO, HTTP4sServer[IO]] =
     for {
@@ -36,7 +37,8 @@ object Server extends IOApp {
       docs         = allEndpoints.toOpenAPI("configableauth", "0.0.1")
       docRoutes = new SwaggerHttp4s(docs.toYaml, "open-api", "spec.yaml")
         .routes[IO]
-      userRoutes = new UsersService[IO](xa).routes
+      auth       = new Auth[IO](authConfig)
+      userRoutes = new UsersService[IO](auth, xa).routes
       router = CORS(
         Router(
           "/api" -> ResponseLogger
@@ -58,8 +60,8 @@ object Server extends IOApp {
     import Commands._
 
     applicationCommand.parse(args) map {
-      case RunServer(apiConfig, dbConfig) =>
-        createServer(apiConfig, dbConfig)
+      case RunServer(apiConfig, authConfig, dbConfig) =>
+        createServer(apiConfig, authConfig, dbConfig)
           .use(_ => IO.never)
           .as(ExitCode.Success)
       case RunMigrations(config) => runMigrations(config)
