@@ -3,8 +3,8 @@ package com.jisantuc.configableauth.api.endpoints
 import java.util.UUID
 
 import com.jisantuc.configableauth.datamodel.User
-import tapir._
-import tapir.json.circe._
+import sttp.tapir._
+import sttp.tapir.json.circe._
 
 object UserEndpoints {
 

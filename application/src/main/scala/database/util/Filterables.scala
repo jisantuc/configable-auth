@@ -18,13 +18,12 @@ trait Filterables {
 
   implicit def listTFilter[T](
       implicit filterable: Filterable[Any, T]
-  ): Filterable[Any, List[T]] = Filterable[Any, List[T]] {
-    someFilterables: List[T] =>
-      {
-        someFilterables
-          .map(filterable.toFilters)
-          .foldLeft(List.empty[Option[Fragment]])(_ ++ _)
-      }
+  ): Filterable[Any, List[T]] = Filterable[Any, List[T]] { someFilterables: List[T] =>
+    {
+      someFilterables
+        .map(filterable.toFilters)
+        .foldLeft(List.empty[Option[Fragment]])(_ ++ _)
+    }
   }
 }
 

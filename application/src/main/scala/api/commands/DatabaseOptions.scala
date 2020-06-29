@@ -35,8 +35,7 @@ trait DatabaseOptions {
     .option[String]("db-user", help = "User to connect with database with")
     .withDefault("configableauth")
 
-  def databaseConfig(
-      implicit contextShift: ContextShift[IO]): Opts[DatabaseConfig] =
+  def databaseConfig(implicit contextShift: ContextShift[IO]): Opts[DatabaseConfig] =
     ((
       databaseUser,
       databasePassword,
@@ -48,10 +47,7 @@ trait DatabaseOptions {
     ) { config =>
       val xa =
         Transactor
-          .fromDriverManager[IO](config.driver,
-                                 config.jdbcUrl,
-                                 config.dbUser,
-                                 config.dbPass)
+          .fromDriverManager[IO](config.driver, config.jdbcUrl, config.dbUser, config.dbPass)
       val select = Try {
         fr"SELECT 1".query[Int].unique.transact(xa).unsafeRunSync()
       }

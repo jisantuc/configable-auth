@@ -8,8 +8,7 @@ import com.monovore.decline.refined._
 trait ApiOptions {
 
   private val externalPort = Opts
-    .option[PosInt]("external-port",
-                    help = "Port users/clients hit for requests")
+    .option[PosInt]("external-port", help = "Port users/clients hit for requests")
     .withDefault(PosInt(8080))
 
   private val internalPort = Opts
@@ -21,20 +20,14 @@ trait ApiOptions {
     .withDefault(PosInt(8080))
 
   private val apiHost = Opts
-    .option[String]("api-host",
-                    help = "Hostname configableauth is hosted it (e.g. localhost)")
+    .option[String]("api-host", help = "Hostname configableauth is hosted it (e.g. localhost)")
     .withDefault("localhost")
 
   private val apiScheme =
     Opts
-      .option[String]("api-scheme",
-                      "Scheme server is exposed to end users with")
+      .option[String]("api-scheme", "Scheme server is exposed to end users with")
       .withDefault("http")
-      .validate("Scheme must be either 'http' or 'https'")(s =>
-        (s == "http" || s == "https"))
+      .validate("Scheme must be either 'http' or 'https'")(s => (s == "http" || s == "https"))
 
-  val apiConfig: Opts[ApiConfig] = (externalPort,
-                                    internalPort,
-                                    apiHost,
-                                    apiScheme) mapN ApiConfig
+  val apiConfig: Opts[ApiConfig] = (externalPort, internalPort, apiHost, apiScheme) mapN ApiConfig
 }

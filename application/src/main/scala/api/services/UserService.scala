@@ -12,7 +12,7 @@ import doobie._
 import doobie.implicits._
 import org.http4s._
 import org.http4s.dsl.Http4sDsl
-import tapir.server.http4s._
+import sttp.tapir.server.http4s._
 import eu.timepit.refined.auto._
 
 class UsersService[F[_]: Sync](xa: Transactor[F])(
@@ -46,8 +46,7 @@ class UsersService[F[_]: Sync](xa: Transactor[F])(
       case _ => Either.left(())
     }
 
-  val routes
-    : HttpRoutes[F] = UserEndpoints.listUsers.toRoutes(_ => listUsers) <+> UserEndpoints.getUser
+  val routes: HttpRoutes[F] = UserEndpoints.listUsers.toRoutes(_ => listUsers) <+> UserEndpoints.getUser
     .toRoutes(id => getUser(id)) <+> UserEndpoints.createUser.toRoutes(
     json => createUser(json)
   ) <+> UserEndpoints.deleteUser.toRoutes(id => deleteUser(id)) <+> UserEndpoints.updateUser

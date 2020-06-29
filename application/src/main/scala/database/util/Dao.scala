@@ -37,7 +37,7 @@ object Dao {
     val countF: Fragment =
       countFragment.getOrElse(fr"SELECT count(id) FROM" ++ tableF)
     val deleteF: Fragment = fr"DELETE FROM" ++ tableF
-    val existF: Fragment = fr"SELECT 1 FROM" ++ tableF
+    val existF: Fragment  = fr"SELECT 1 FROM" ++ tableF
 
     /** Add another filter to the query being constructed */
     def filter[M >: Model, T](
@@ -94,9 +94,7 @@ object Dao {
       listQ(offset, limit).to[List]
     }
 
-    def list(offset: Int,
-             limit: Int,
-             orderClause: Fragment): ConnectionIO[List[Model]] = {
+    def list(offset: Int, limit: Int, orderClause: Fragment): ConnectionIO[List[Model]] = {
       listQ(offset, limit, orderClause).to[List]
     }
 

@@ -10,5 +10,5 @@ final case class DatabaseConfig(
     dbName: String
 ) {
   val jdbcUrl = s"jdbc:postgresql://$dbHost:$dbPort/$dbName"
-  val driver = "org.postgresql.Driver"
+  val driver  = "org.postgresql.Driver"
 }

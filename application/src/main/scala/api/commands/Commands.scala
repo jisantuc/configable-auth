@@ -11,8 +11,7 @@ object Commands {
 
   final case class RunServer(apiConfig: ApiConfig, dbConfig: DatabaseConfig)
 
-  private def runMigrationsOpts(
-      implicit cs: ContextShift[IO]): Opts[RunMigrations] =
+  private def runMigrationsOpts(implicit cs: ContextShift[IO]): Opts[RunMigrations] =
     Opts.subcommand("migrate", "Runs migrations against database") {
       Options.databaseConfig map RunMigrations
     }

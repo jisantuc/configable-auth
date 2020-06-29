@@ -11,9 +11,9 @@ import org.http4s.implicits._
 import org.http4s.server.blaze._
 import org.http4s.server.middleware._
 import org.http4s.server.{Router, Server => HTTP4sServer}
-import tapir.docs.openapi._
-import tapir.openapi.circe.yaml._
-import tapir.swagger.http4s.SwaggerHttp4s
+import sttp.tapir.docs.openapi._
+import sttp.tapir.openapi.circe.yaml._
+import sttp.tapir.swagger.http4s.SwaggerHttp4s
 
 object Server extends IOApp {
 
@@ -22,18 +22,18 @@ object Server extends IOApp {
       dbConfig: DatabaseConfig
   ): Resource[IO, HTTP4sServer[IO]] =
     for {
-      connectionEc <- ExecutionContexts.fixedThreadPool[IO](2)
-      transactionEc <- ExecutionContexts.cachedThreadPool[IO]
+      connectionEc       <- ExecutionContexts.fixedThreadPool[IO](2)
+      transactionBlocker <- Blocker[IO]
       xa <- HikariTransactor.newHikariTransactor[IO](
         "org.postgresql.Driver",
         dbConfig.jdbcUrl,
         dbConfig.dbUser,
         dbConfig.dbPass,
         connectionEc,
-        transactionEc
+        transactionBlocker
       )
       allEndpoints = UserEndpoints.endpoints
-      docs = allEndpoints.toOpenAPI("configableauth", "0.0.1")
+      docs         = allEndpoints.toOpenAPI("configableauth", "0.0.1")
       docRoutes = new SwaggerHttp4s(docs.toYaml, "open-api", "spec.yaml")
         .routes[IO]
       userRoutes = new UsersService[IO](xa).routes
@@ -43,8 +43,9 @@ object Server extends IOApp {
             .httpRoutes(false, false)(userRoutes <+> docRoutes)
         )
       ).orNotFound
+      serverEc <- ExecutionContexts.fixedThreadPool[IO](4)
       server <- {
-        BlazeServerBuilder[IO]
+        BlazeServerBuilder[IO](serverEc)
           .bindHttp(apiConfig.internalPort.value, "0.0.0.0")
           .withHttpApp(router)
           .resource
