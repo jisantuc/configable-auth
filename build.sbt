@@ -13,6 +13,7 @@ val FlywayVersion           = "6.5.0"
 val GeotrellisServerVersion = "4.2.0"
 val Http4sVersion           = "0.21.5"
 val Log4CatsVersion         = "1.1.1"
+val NewtypeVersion          = "0.4.4"
 val PostGISVersion          = "2.5.0"
 val PureConfigVersion       = "0.12.1"
 val RefinedVersion          = "0.9.14"
@@ -43,6 +44,7 @@ val http4sCirce           = "org.http4s"                  %% "http4s-circe"     
 val http4sDsl             = "org.http4s"                  %% "http4s-dsl"               % Http4sVersion
 val http4sServer          = "org.http4s"                  %% "http4s-blaze-server"      % Http4sVersion
 val log4cats              = "io.chrisdavenport"           %% "log4cats-slf4j"           % Log4CatsVersion
+val newtype               = "io.estatico"                 %% "newtype"                  % NewtypeVersion
 val postgis               = "net.postgis"                 % "postgis-jdbc"              % PostGISVersion
 val pureConfig            = "com.github.pureconfig"       %% "pureconfig"               % PureConfigVersion
 val refined               = "eu.timepit"                  %% "refined"                  % RefinedVersion
@@ -129,6 +131,7 @@ lazy val dependencies = Seq(
   http4sDsl,
   http4sServer,
   log4cats,
+  newtype,
   postgis,
   pureConfig,
   refined,
