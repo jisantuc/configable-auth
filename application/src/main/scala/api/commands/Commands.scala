@@ -9,7 +9,7 @@ object Commands {
 
   final case class RunMigrations(databaseConfig: DatabaseConfig)
 
-  final case class RunServer(apiConfig: ApiConfig, dbConfig: DatabaseConfig)
+  final case class RunServer(apiConfig: ApiConfig, authConfig: AuthConfig, dbConfig: DatabaseConfig)
 
   private def runMigrationsOpts(implicit cs: ContextShift[IO]): Opts[RunMigrations] =
     Opts.subcommand("migrate", "Runs migrations against database") {
@@ -18,7 +18,7 @@ object Commands {
 
   private def runServerOpts(implicit cs: ContextShift[IO]): Opts[RunServer] =
     Opts.subcommand("serve", "Runs web service") {
-      (Options.apiConfig, Options.databaseConfig) mapN RunServer
+      (Options.apiConfig, Options.authConfig, Options.databaseConfig) mapN RunServer
     }
 
   def runMigrations(dbConfig: DatabaseConfig): IO[ExitCode] = IO {
