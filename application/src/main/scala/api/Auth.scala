@@ -34,7 +34,7 @@ class Auth[F[_]: Sync: SttpBackend[*[_], Nothing, NothingT]](authConfig: AuthCon
       response.body.leftMap {
         case DeserializationError(_, e: DecodingFailure) =>
           println(s"Err is: $e")
-          s"The authentication server didn't response as expected at ${CursorOp.opsToPath(e.history)}"
+          s"The authentication server didn't respond as expected at ${CursorOp.opsToPath(e.history)}"
         case err =>
           s"Something went wrong reading JSON from the configured auth server: ${err.body}"
       }
