@@ -6,6 +6,7 @@ interface ValidationController {
 
 export const Validator: ValidationController = {
     validateToken: (request: Request, response: Response) => {
+        console.log(request.body);
         const token: string | null = request.body.token;
         token === "good token" ?
             response.json(
@@ -14,7 +15,7 @@ export const Validator: ValidationController = {
                     ttl: 1800,
                     scopes: ["*"]
                 }
-            ) : response.status(403).json(
+            ) : response.json(
                 {
                     badToken: token,
                     realm: "authenticated-service"

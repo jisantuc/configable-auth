@@ -11,6 +11,7 @@ import org.http4s.implicits._
 import org.http4s.server.blaze._
 import org.http4s.server.middleware._
 import org.http4s.server.{Router, Server => HTTP4sServer}
+import sttp.client.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import sttp.tapir.docs.openapi._
 import sttp.tapir.openapi.circe.yaml._
 import sttp.tapir.swagger.http4s.SwaggerHttp4s
@@ -22,38 +23,40 @@ object Server extends IOApp {
       authConfig: AuthConfig,
       dbConfig: DatabaseConfig
   ): Resource[IO, HTTP4sServer[IO]] =
-    for {
-      connectionEc       <- ExecutionContexts.fixedThreadPool[IO](2)
-      transactionBlocker <- Blocker[IO]
-      xa <- HikariTransactor.newHikariTransactor[IO](
-        "org.postgresql.Driver",
-        dbConfig.jdbcUrl,
-        dbConfig.dbUser,
-        dbConfig.dbPass,
-        connectionEc,
-        transactionBlocker
-      )
-      allEndpoints = UserEndpoints.endpoints
-      docs         = allEndpoints.toOpenAPI("configableauth", "0.0.1")
-      docRoutes = new SwaggerHttp4s(docs.toYaml, "open-api", "spec.yaml")
-        .routes[IO]
-      auth       = new Auth[IO](authConfig)
-      userRoutes = new UsersService[IO](auth, xa).routes
-      router = CORS(
-        Router(
-          "/api" -> ResponseLogger
-            .httpRoutes(false, false)(userRoutes <+> docRoutes)
+    AsyncHttpClientCatsBackend.resource[IO]() flatMap { implicit backend =>
+      for {
+        connectionEc       <- ExecutionContexts.fixedThreadPool[IO](2)
+        transactionBlocker <- Blocker[IO]
+        xa <- HikariTransactor.newHikariTransactor[IO](
+          "org.postgresql.Driver",
+          dbConfig.jdbcUrl,
+          dbConfig.dbUser,
+          dbConfig.dbPass,
+          connectionEc,
+          transactionBlocker
         )
-      ).orNotFound
-      serverEc <- ExecutionContexts.fixedThreadPool[IO](4)
-      server <- {
-        BlazeServerBuilder[IO](serverEc)
-          .bindHttp(apiConfig.internalPort.value, "0.0.0.0")
-          .withHttpApp(router)
-          .resource
+        allEndpoints = UserEndpoints.endpoints
+        docs         = allEndpoints.toOpenAPI("configableauth", "0.0.1")
+        docRoutes = new SwaggerHttp4s(docs.toYaml, "open-api", "spec.yaml")
+          .routes[IO]
+        auth       = new Auth[IO](authConfig)
+        userRoutes = new UsersService[IO](auth, xa).routes
+        router = CORS(
+          Router(
+            "/api" -> ResponseLogger
+              .httpRoutes(false, false)(userRoutes <+> docRoutes)
+          )
+        ).orNotFound
+        serverEc <- ExecutionContexts.fixedThreadPool[IO](4)
+        server <- {
+          BlazeServerBuilder[IO](serverEc)
+            .bindHttp(apiConfig.internalPort.value, "0.0.0.0")
+            .withHttpApp(router)
+            .resource
+        }
+      } yield {
+        server
       }
-    } yield {
-      server
     }
 
   override def run(args: List[String]): IO[ExitCode] = {

@@ -6,7 +6,7 @@ import cats.effect._
 import cats.implicits._
 import com.jisantuc.configableauth.api.endpoints.UserEndpoints
 import com.jisantuc.configableauth.database.UserDao
-import com.jisantuc.configableauth.datamodel.{Domain, User}
+import com.jisantuc.configableauth.datamodel.{Domain, InvalidToken, User, ValidToken}
 import doobie.util.transactor.Transactor
 import doobie._
 import doobie.implicits._
@@ -50,34 +50,41 @@ class UsersService[F[_]: Sync](auth: Auth[F], xa: Transactor[F])(
 
   val listRoute = UserEndpoints.listUsers
     .serverLogicPart(auth.authenticateRoute(Domain.Read))
-    .andThen(_ => listUsers)
+    .andThen({
+      case (ValidToken(_, _, _), _) => listUsers
+      case (InvalidToken(_, _), _)  => Sync[F].pure(Either.left("no good"))
+    })
     .toRoutes
 
   val detailRoute = UserEndpoints.getUser
     .serverLogicPart(auth.authenticateRoute(Domain.Read))
     .andThen({
-      case ((), userId) => getUser(userId)
+      case (ValidToken(_, _, _), userId) => getUser(userId)
+      case (InvalidToken(_, _), _)       => Sync[F].pure(Either.left("no good"))
     })
     .toRoutes
 
   val createRoute = UserEndpoints.createUser
     .serverLogicPart(auth.authenticateRoute(Domain.Creative))
     .andThen({
-      case (_, userCreate) => createUser(userCreate)
+      case (ValidToken(_, _, _), userCreate) => createUser(userCreate)
+      case (InvalidToken(_, _), _)           => Sync[F].pure(Either.left("no good"))
     })
     .toRoutes
 
   val deleteRoute = UserEndpoints.deleteUser
     .serverLogicPart(auth.authenticateRoute(Domain.Destructive))
     .andThen({
-      case ((), userId) => deleteUser(userId)
+      case (ValidToken(_, _, _), userId) => deleteUser(userId)
+      case (InvalidToken(_, _), _)       => Sync[F].pure(Either.left("no good"))
     })
     .toRoutes
 
   val updateRoute = UserEndpoints.updateUser
     .serverLogicPart(auth.authenticateRoute(Domain.Destructive))
     .andThen({
-      case ((), (update, userId)) => updateUser(update, userId)
+      case (ValidToken(_, _, _), (update, userId)) => updateUser(update, userId)
+      case (InvalidToken(_, _), _)                 => Sync[F].pure(Either.left("no good"))
     })
     .toRoutes
 
