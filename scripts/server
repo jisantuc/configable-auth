@@ -24,7 +24,7 @@ then
             ;;
         *)
             echo -e "\e[32m[configableauth] Starting API service\e[0m"
-            bloop run application --args serve
+            bloop run application -- serve "$@"
             ;;
     esac
 fi

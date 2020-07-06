@@ -20,44 +20,48 @@ val RefinedVersion          = "0.9.14"
 val ScapegoatVersion        = "1.3.11"
 val Slf4jVersion            = "1.7.30"
 val Specs2Version           = "4.10.0"
+val SttpVersion             = "2.2.0"
 val TapirVersion            = "0.16.1"
 
 // Dependencies
-val circeCore             = "io.circe"                    %% "circe-core"               % CirceVersion
-val circeFs2              = "io.circe"                    %% "circe-fs2"                % CirceFs2Version
-val circeGeneric          = "io.circe"                    %% "circe-generic"            % CirceVersion
-val circeRefined          = "io.circe"                    %% "circe-refined"            % CirceVersion
-val decline               = "com.monovore"                %% "decline"                  % DeclineVersion
-val declineRefined        = "com.monovore"                %% "decline-refined"          % DeclineVersion
-val doobie                = "org.tpolecat"                %% "doobie-core"              % DoobieVersion
-val doobieHikari          = "org.tpolecat"                %% "doobie-hikari"            % DoobieVersion
-val doobiePostgres        = "org.tpolecat"                %% "doobie-postgres"          % DoobieVersion
-val doobiePostgresCirce   = "org.tpolecat"                %% "doobie-postgres-circe"    % DoobieVersion
-val doobieRefined         = "org.tpolecat"                %% "doobie-refined"           % DoobieVersion
-val doobieScalatest       = "org.tpolecat"                %% "doobie-scalatest"         % DoobieVersion % "test"
-val doobieSpecs2          = "org.tpolecat"                %% "doobie-specs2"            % DoobieVersion % "test"
-val emoji                 = "com.lightbend"               %% "emoji"                    % EmojiVersion
-val flyway                = "org.flywaydb"                % "flyway-core"               % FlywayVersion
-val geotrellisServerCore  = "com.azavea.geotrellis"       %% "geotrellis-server-core"   % GeotrellisServerVersion
-val http4s                = "org.http4s"                  %% "http4s-blaze-server"      % Http4sVersion
-val http4sCirce           = "org.http4s"                  %% "http4s-circe"             % Http4sVersion
-val http4sDsl             = "org.http4s"                  %% "http4s-dsl"               % Http4sVersion
-val http4sServer          = "org.http4s"                  %% "http4s-blaze-server"      % Http4sVersion
-val log4cats              = "io.chrisdavenport"           %% "log4cats-slf4j"           % Log4CatsVersion
-val newtype               = "io.estatico"                 %% "newtype"                  % NewtypeVersion
-val postgis               = "net.postgis"                 % "postgis-jdbc"              % PostGISVersion
-val pureConfig            = "com.github.pureconfig"       %% "pureconfig"               % PureConfigVersion
-val refined               = "eu.timepit"                  %% "refined"                  % RefinedVersion
-val refinedCats           = "eu.timepit"                  %% "refined-cats"             % RefinedVersion
-val slf4jApi              = "org.slf4j"                   % "slf4j-api"                 % Slf4jVersion
-val slf4jSimple           = "org.slf4j"                   % "slf4j-simple"              % Slf4jVersion
-val specs2Core            = "org.specs2"                  %% "specs2-core"              % Specs2Version % "test"
-val tapir                 = "com.softwaremill.sttp.tapir" %% "tapir-core"               % TapirVersion
-val tapirCirce            = "com.softwaremill.sttp.tapir" %% "tapir-json-circe"         % TapirVersion
-val tapirHttp4sServer     = "com.softwaremill.sttp.tapir" %% "tapir-http4s-server"      % TapirVersion
-val tapirOpenAPICirceYAML = "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % TapirVersion
-val tapirOpenAPIDocs      = "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs"       % TapirVersion
-val tapirSwaggerUIHttp4s  = "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-http4s"  % TapirVersion
+val circeCore             = "io.circe"                     %% "circe-core"                     % CirceVersion
+val circeFs2              = "io.circe"                     %% "circe-fs2"                      % CirceFs2Version
+val circeGeneric          = "io.circe"                     %% "circe-generic"                  % CirceVersion
+val circeRefined          = "io.circe"                     %% "circe-refined"                  % CirceVersion
+val decline               = "com.monovore"                 %% "decline"                        % DeclineVersion
+val declineRefined        = "com.monovore"                 %% "decline-refined"                % DeclineVersion
+val doobie                = "org.tpolecat"                 %% "doobie-core"                    % DoobieVersion
+val doobieHikari          = "org.tpolecat"                 %% "doobie-hikari"                  % DoobieVersion
+val doobiePostgres        = "org.tpolecat"                 %% "doobie-postgres"                % DoobieVersion
+val doobiePostgresCirce   = "org.tpolecat"                 %% "doobie-postgres-circe"          % DoobieVersion
+val doobieRefined         = "org.tpolecat"                 %% "doobie-refined"                 % DoobieVersion
+val doobieScalatest       = "org.tpolecat"                 %% "doobie-scalatest"               % DoobieVersion % "test"
+val doobieSpecs2          = "org.tpolecat"                 %% "doobie-specs2"                  % DoobieVersion % "test"
+val emoji                 = "com.lightbend"                %% "emoji"                          % EmojiVersion
+val flyway                = "org.flywaydb"                 % "flyway-core"                     % FlywayVersion
+val geotrellisServerCore  = "com.azavea.geotrellis"        %% "geotrellis-server-core"         % GeotrellisServerVersion
+val http4s                = "org.http4s"                   %% "http4s-blaze-server"            % Http4sVersion
+val http4sCirce           = "org.http4s"                   %% "http4s-circe"                   % Http4sVersion
+val http4sDsl             = "org.http4s"                   %% "http4s-dsl"                     % Http4sVersion
+val http4sServer          = "org.http4s"                   %% "http4s-blaze-server"            % Http4sVersion
+val log4cats              = "io.chrisdavenport"            %% "log4cats-slf4j"                 % Log4CatsVersion
+val newtype               = "io.estatico"                  %% "newtype"                        % NewtypeVersion
+val postgis               = "net.postgis"                  % "postgis-jdbc"                    % PostGISVersion
+val pureConfig            = "com.github.pureconfig"        %% "pureconfig"                     % PureConfigVersion
+val refined               = "eu.timepit"                   %% "refined"                        % RefinedVersion
+val refinedCats           = "eu.timepit"                   %% "refined-cats"                   % RefinedVersion
+val slf4jApi              = "org.slf4j"                    % "slf4j-api"                       % Slf4jVersion
+val slf4jSimple           = "org.slf4j"                    % "slf4j-simple"                    % Slf4jVersion
+val specs2Core            = "org.specs2"                   %% "specs2-core"                    % Specs2Version % "test"
+val sttp                  = "com.softwaremill.sttp.client" %% "core"                           % SttpVersion
+val sttpCatsEffect        = "com.softwaremill.sttp.client" %% "async-http-client-backend-cats" % SttpVersion
+val sttpCirce             = "com.softwaremill.sttp.client" %% "circe"                          % SttpVersion
+val tapir                 = "com.softwaremill.sttp.tapir"  %% "tapir-core"                     % TapirVersion
+val tapirCirce            = "com.softwaremill.sttp.tapir"  %% "tapir-json-circe"               % TapirVersion
+val tapirHttp4sServer     = "com.softwaremill.sttp.tapir"  %% "tapir-http4s-server"            % TapirVersion
+val tapirOpenAPICirceYAML = "com.softwaremill.sttp.tapir"  %% "tapir-openapi-circe-yaml"       % TapirVersion
+val tapirOpenAPIDocs      = "com.softwaremill.sttp.tapir"  %% "tapir-openapi-docs"             % TapirVersion
+val tapirSwaggerUIHttp4s  = "com.softwaremill.sttp.tapir"  %% "tapir-swagger-ui-http4s"        % TapirVersion
 
 // Enable a basic import sorter -- rules are defined in .scalafix.conf
 scalafixDependencies in ThisBuild +=
@@ -67,7 +71,7 @@ lazy val settings = Seq(
   organization := "com.jisantuc",
   name := "configableauth",
   version := "0.0.1-SNAPSHOT",
-  scalaVersion := "2.12.11",
+  scalaVersion in ThisBuild := "2.12.11",
   scalafmtOnCompile := true,
   scapegoatVersion in ThisBuild := ScapegoatVersion,
   addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.0" cross CrossVersion.full),
@@ -138,6 +142,9 @@ lazy val dependencies = Seq(
   refinedCats,
   slf4jApi,
   slf4jSimple,
+  sttp,
+  sttpCatsEffect,
+  sttpCirce,
   tapir,
   tapirCirce,
   tapirHttp4sServer,
