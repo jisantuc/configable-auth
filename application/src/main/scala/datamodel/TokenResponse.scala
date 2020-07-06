@@ -15,7 +15,7 @@ object TokenResponse {
       case invalid @ InvalidToken(_, _) => Encoder[InvalidToken].apply(invalid)
     }
   }
-  implicit val decTokenResponse: Decoder[TokenResponse] = Decoder[ValidToken].widen or Decoder[InvalidToken].widen
+  implicit val decTokenResponse: Decoder[TokenResponse] = Decoder[InvalidToken].widen or Decoder[ValidToken].widen
 }
 
 case class ValidToken(
